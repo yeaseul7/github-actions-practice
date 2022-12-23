@@ -1,0 +1,33 @@
+name: test 
+# workflow의 이름
+
+on: 
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+      - main
+      # - feat/**
+      # event 명시
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    #각 개별적인 runner, ubuntu의 최신환경..?
+    steps:
+    # job은 스탭으로 구성된다. + 어떤 일을 수행시킬지도 구성된다 그 이름은(uses)
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        #actions 뒤에 있는건 가져다가 쓰는 것이기 때문에 외울 필요가 없다.
+      - run: npm install -g bats
+      - run: bats -v
+      # npm에서 bats 깔고 버전 확인
+      - run: echo "힘내! 오늘도 힘내!"
+      # 개발자에게 메세지 전해주고 싶다?
+      - run: echo "나는 ${{github.actor}}야"
+      # github.actor는 git 닉네임
+      - run: echo "${{github.event_name}} event에 의해서 자동으로 실행됐어"
+      
